@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electricity Bill</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>Electricity Bill Calculator</header>
+    <div class="content">
+        <table style="border: 1px solid #123456; border-spacing: 0px;">
+            <tr>
+                <th>Rooms</th>
+                <th>Previous Units</th>
+                <th>Current Units</th>
+                <th>Units</th>
+                <th>Total Units</th>
+                <th>Ele. Bill</th>
+                <th>Balance</th>
+                <th>Water Bill</th>
+                <th>Total Bill</th>
+            </tr>
+            <tr>
+                <th>Room1</th>
+                <td><input type="number" class="prev"></td>
+                <td><input type="number" class="curr"></td>
+                <td><input type="number" class="units" readonly></td>
+                <td><input type="number" class="tunit" readonly></td>
+                <td><input type="number" class="ebill" readonly></td>
+                <td><input type="number" class="balance" value="0"></td>
+                <td><input type="number" class="wbill" readonly value="50"></td>
+                <td><input type="number" class="tbill" readonly></td>
+            </tr>
+            <tr>
+                <th>Room2</th>
+                <td><input type="number" class="prev"></td>
+                <td><input type="number" class="curr"></td>
+                <td><input type="number" class="units" readonly></td>
+                <td><input type="number" class="tunit" readonly></td>
+                <td><input type="number" class="ebill" readonly></td>
+                <td><input type="number" class="balance" value="0"></td>
+                <td><input type="number" class="wbill" readonly value="50"></td>
+                <td><input type="number" class="tbill" readonly></td>
+            </tr>
+            <tr>
+                <th>Room3</th>
+                <td><input type="number" class="prev"></td>
+                <td><input type="number" class="curr"></td>
+                <td><input type="number" class="units" readonly></td>
+                <td><input type="number" class="tunit" readonly></td>
+                <td><input type="number" class="ebill" readonly></td>
+                <td><input type="number" class="balance" value="0"></td>
+                <td><input type="number" class="wbill" readonly value="50"></td>
+                <td><input type="number" class="tbill" readonly></td>
+            </tr>
+            <tr>
+                <th>Room4</th>
+                <td><input type="number" class="prev"></td>
+                <td><input type="number" class="curr"></td>
+                <td><input type="number" class="units" readonly></td>
+                <td><input type="number" class="tunit" readonly></td>
+                <td><input type="number" class="ebill" readonly></td>
+                <td><input type="number" class="balance" value="0"></td>
+                <td><input type="number" class="wbill" readonly value="50"></td>
+                <td><input type="number" class="tbill" readonly></td>
+            </tr>
+            <tr>
+                <th>Room5</th>
+                <td><input type="number" class="prev"></td>
+                <td><input type="number" class="curr"></td>
+                <td><input type="number" class="units" readonly></td>
+                <td><input type="number" class="tunit" readonly></td>
+                <td><input type="number" class="ebill" readonly></td>
+                <td><input type="number" class="balance" value="0"></td>
+                <td><input type="number" class="wbill" readonly value="50"></td>
+                <td><input type="number" class="tbill" readonly></td>
+            </tr>
+        </table>
+        <div class="tru">
+            <label for="tru">Remain Units</label>
+            <input type="number" class="ru" readonly>
+            <button class="calculate">Calculate</button>
+        </div>
+
+    </div>
+</body>
+<script>
+    document.querySelector('.calculate').addEventListener('click', () => {
+        const rows = document.querySelectorAll('table tr');
+        let roomUnits = [];
+        let totalUnits = [];
+        let remainUnits = 0;
+
+        // Calculate units for each room and store in arrays
+        rows.forEach((row, index) => {
+            if (index === 0) return; // Skip header row
+            const prev = row.querySelector('.prev')?.value || 0;
+            const curr = row.querySelector('.curr')?.value || 0;
+
+            const units = Math.max(curr - prev, 0); // Prevent negative values
+            row.querySelector('.units').value = units;
+            roomUnits.push(units);
+        });
+        remainUnits = roomUnits[1] + roomUnits[2] + roomUnits[3];
+        document.querySelector('.ru').value = remainUnits;
+        // Calculate total units for each room
+        totalUnits[0] = roomUnits[0] - remainUnits;
+        totalUnits[1] = roomUnits[1];
+        totalUnits[2] = roomUnits[2];
+        totalUnits[3] = roomUnits[3];
+        totalUnits[4] = roomUnits[4];
+
+        totalUnits.forEach((unit, index) => {
+            rows[index + 1].querySelector('.tunit').value = Math.max(unit, 0);
+        });
+
+        // Calculate electric bill, total bill, and remain units
+        rows.forEach((row, index) => {
+            if (index === 0) return; // Skip header row
+
+            const tunit = row.querySelector('.tunit')?.value || 0;
+            const ebill = tunit * 6; // Ele. bill = total units * 6
+            row.querySelector('.ebill').value = ebill;
+
+            const balance = row.querySelector('.balance')?.value || 0;
+            const wbill = row.querySelector('.wbill')?.value || 50;
+            const tbill = parseFloat(ebill) + parseFloat(balance) + parseFloat(wbill);
+
+            row.querySelector('.tbill').value = tbill;
+        });
+
+        // Calculate remain units
+        
+    });
+</script>
+
+</html>
